@@ -1,11 +1,11 @@
 package com.fms.booking.controller;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +23,16 @@ import com.fms.booking.service.BookingService;
 
 @RestController
 @EnableWebMvc
+@CrossOrigin(origins = "http://localhost:4200")
 public class BookingController {
 	
+
 	@Autowired
 	private BookingService bookingService;
+
 	
 	@PostMapping(value="/addBooking")
-	public Booking  addBooking(@Valid @RequestBody Booking booking) {
+	public Booking  addBooking(@Valid @RequestBody Booking booking) throws BookingException, PassengerException {
 		return this.bookingService.addBooking(booking);
 	}
 	
@@ -44,11 +47,13 @@ public class BookingController {
 	}
 	@PutMapping("/cancelSingleTicket/booking/{passengerId}")
 	public Booking cancelTicketFromBooking(@Valid @RequestBody Booking booking, @PathVariable long passengerId,long price) throws BookingException, PassengerException {
+//		String address=restTemplate.getForObject("http://localhost:8091/validateBooking/0",String.class);
+//		Double price=(double)address
 		return this.bookingService.cancelTicketFromBooking(booking,passengerId,price);
 	}
 	
 	@GetMapping("/userBookings/{userId}")
-	public List<Booking> viewAllBookingsOfUser(@PathVariable BigInteger userId) throws BookingException{
+	public List<Booking> viewAllBookingsOfUser(@PathVariable long userId) throws BookingException{
 		return this.bookingService.viewAllBookingsOfUser(userId);
 	}
 	

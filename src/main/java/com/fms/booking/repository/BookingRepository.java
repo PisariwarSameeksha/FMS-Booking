@@ -12,5 +12,5 @@ import com.fms.booking.entity.Booking;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long>{
 	
-	List<Booking> findBookingsByuserId(BigInteger userId);
+	List<Booking> findBookingsByuserId(long userId);
 }

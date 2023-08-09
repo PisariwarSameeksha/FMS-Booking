@@ -1,5 +1,5 @@
 package com.fms.booking.entity;
-import java.math.BigInteger;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,20 +9,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 
+
 @Entity
 public class Booking {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long bookingId;
 	
-	private BigInteger userId ;
+	private long userId ;
 	
 	@NotNull(message="Booking must contain atleast one passenger")
 	@Min(value = 1, message = "Value must be at least 1")
@@ -36,6 +38,9 @@ public class Booking {
     @Max(value = 2000000, message = "Value must be at most 2000000")
 	private Double ticketCost;
 	
+	@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits")
+	private String contactNo;
+	
 	@NotNull(message="Only CANCELLED or BOOKED are allowed")
 	private BookingStatus bookingStatus;
 
@@ -48,24 +53,48 @@ public class Booking {
 		
 	}
 
-	public Booking(long bookingId, BigInteger userId, Integer passengerCount, LocalDate bookingDate, Double ticketCost,
-			BookingStatus bookingStatus, List<Passenger> passengerList) {
+//	public Booking(long bookingId, long userId, Integer passengerCount, LocalDate bookingDate, Double ticketCost,
+//			BookingStatus bookingStatus, List<Passenger> passengerList) {
+//		super();
+//		this.bookingId = bookingId;
+//		this.userId = userId;
+//		this.passengerCount = passengerCount;
+//		this.bookingDate = bookingDate;
+//		this.ticketCost = ticketCost;
+//		this.bookingStatus = bookingStatus;
+//		this.passengerList = passengerList;
+//	}
+	
+
+	public Booking(long bookingId, long userId,
+			@NotNull(message = "Booking must contain atleast one passenger") @Min(value = 1, message = "Value must be at least 1") @Max(value = 10, message = "Value must be at most 10") Integer passengerCount,
+			@PastOrPresent(message = "must be a date in the past or in the present") LocalDate bookingDate,
+			@Min(value = 3000, message = "Value must be at least 3000") @Max(value = 2000000, message = "Value must be at most 2000000") Double ticketCost,
+			@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits") String contactNo,
+			@NotNull(message = "Only CANCELLED or BOOKED are allowed") BookingStatus bookingStatus,
+			List<Passenger> passengerList) {
 		super();
 		this.bookingId = bookingId;
 		this.userId = userId;
 		this.passengerCount = passengerCount;
 		this.bookingDate = bookingDate;
 		this.ticketCost = ticketCost;
+		this.contactNo = contactNo;
 		this.bookingStatus = bookingStatus;
 		this.passengerList = passengerList;
 	}
 
+	public String getContactNo() {
+		return contactNo;
+	}
 
+	public void setContactNo(String contactNo) {
+		this.contactNo = contactNo;
+	}
 
 	public long getBookingId() {
 		return bookingId;
 	}
-
 
 
 	public void setBookingId(long bookingId) {
@@ -73,13 +102,13 @@ public class Booking {
 	}
 
 
-	public BigInteger getUserId() {
+	public long getUserId() {
 		return userId;
 	}
 
 
 
-	public void setUserId(BigInteger userId) {
+	public void setUserId(long userId) {
 		this.userId = userId;
 	}
 

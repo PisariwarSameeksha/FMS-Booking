@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class Passenger {
 	
 	@Id
-//	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long passengerId;
 	
 	@NotBlank(message = "Name is mandatory")
@@ -48,6 +48,8 @@ public class Passenger {
 		super();
 	}
 
+
+
 	public Passenger(long passengerId, String passengerName, String contactNo, String uid, Integer passengerAge,
 			String gender, double lugguage) {
 		super();
@@ -60,20 +62,6 @@ public class Passenger {
 		this.lugguage = lugguage;
 	}
 
-
-	public Passenger(long passengerId, String passengerName, String contactNo, String uid, Integer passengerAge,
-			String gender) {
-		super();
-		this.passengerId = passengerId;
-		this.passengerName = passengerName;
-		this.contactNo = contactNo;
-		this.uid = uid;
-		this.passengerAge = passengerAge;
-		this.gender = gender;
-	}
-	
-
-	
 	public double getLugguage() {
 		return lugguage;
 	}

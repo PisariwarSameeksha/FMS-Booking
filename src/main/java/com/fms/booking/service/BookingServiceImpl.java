@@ -1,6 +1,6 @@
 package com.fms.booking.service;
 
-import java.math.BigInteger;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +24,12 @@ public class BookingServiceImpl implements BookingService{
 	private PassengerRepository passengerRepo;
 
 	@Override
-	public Booking addBooking(Booking booking) {
+	public Booking addBooking(Booking booking) throws BookingException {
 		
+		Optional<Booking> booking1= bookingRepo.findById(booking.getBookingId());
+		if(booking1.isPresent()) {
+			throw new BookingException("Booking already present");
+		}
 		   List<Passenger> passengers = booking.getPassengerList();
 	        for (Passenger passenger : passengers) {
 	        	passengerRepo.save(passenger);
@@ -85,19 +89,19 @@ public class BookingServiceImpl implements BookingService{
 	public Passenger validatePassenger(long passengerId) throws PassengerException {
 		Optional<Passenger> foundPasssenger = passengerRepo.findById(passengerId);
 		if (!foundPasssenger.isPresent()) {
-			throw new PassengerException("No passenger bookedwith id " + passengerId );
+			throw new PassengerException("No passenger booked with this id");
 		}
 		return foundPasssenger.get();
 		
 	}
 
 	@Override
-	public List<Booking> viewAllBookingsOfUser(BigInteger userId) throws BookingException {
+	public List<Booking> viewAllBookingsOfUser(long userId) throws BookingException {
 		List<Booking> findBooking = bookingRepo.findBookingsByuserId(userId);
 		if (!findBooking.isEmpty()) {
 			return bookingRepo.findBookingsByuserId(userId);
 		}
-		throw new BookingException("No Booking done by id " + userId );
+		throw new BookingException("No Booking done by this id " );
 	}
 
 	@Override
@@ -139,7 +143,7 @@ public class BookingServiceImpl implements BookingService{
 		Optional<Booking> bookingToBeDeleted = bookingRepo.findById(bookingId);
 		if(bookingToBeDeleted.isPresent()) {
 			this.bookingRepo.deleteById(bookingId);
-			return "Booking with id "+bookingId+"deleted successfully";
+			return "Booking with id "+bookingId+" deleted successfully";
 		}
 		else {
 			throw new BookingException("No booking found with id " + bookingId);
