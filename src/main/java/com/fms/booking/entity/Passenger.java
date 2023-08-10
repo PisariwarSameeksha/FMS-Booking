@@ -18,25 +18,24 @@ public class Passenger {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long passengerId;
 	
-	@NotBlank(message = "Name is mandatory")
+//	@NotBlank(message = "Name is mandatory")
 	@Pattern(regexp="^[A-Za-z\\s]{3,15}$")
 	private String passengerName;
 	
-	@NotNull(message = "contact number must not be null")
 	@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits")
 	private String contactNo;
 	
 	@Pattern(regexp = "^[a-zA-Z0-9]{7,12}$", message = "Only alphanumerics values are allowed")
-	@NotNull(message = "uid must not be null")
+//	@NotNull(message = "uid must not be null")
 	private String uid;
 	
-	@NotNull(message = "Age must not be null")
+//	@NotNull(message = "Age must not be null")
 	@Min(value = 1, message = "Value must be at least 1")
     @Max(value = 120, message = "Value must be at most 120")
 	private Integer passengerAge;
 	
 	@Pattern(regexp="^(Male|Female|M|F)$",message="Only Male / Female are allowed")
-	@NotBlank(message = "Gender is mandatory")
+//	@NotBlank(message = "Gender is mandatory")
 	private String gender;
 	
 	

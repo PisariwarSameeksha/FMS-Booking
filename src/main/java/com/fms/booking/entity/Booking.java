@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ public class Booking {
 	
 	private long userId ;
 	
-	@NotNull(message="Booking must contain atleast one passenger")
+//	@NotNull(message="Booking must contain atleast one passenger")
 	@Min(value = 1, message = "Value must be at least 1")
     @Max(value = 10, message = "Value must be at most 10")
 	private Integer passengerCount;
@@ -41,10 +42,10 @@ public class Booking {
 	@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits")
 	private String contactNo;
 	
-	@NotNull(message="Only CANCELLED or BOOKED are allowed")
+//	@NotNull(message="Only CANCELLED or BOOKED are allowed")
 	private BookingStatus bookingStatus;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	List<Passenger> passengerList = new ArrayList<>();
 
 
@@ -65,28 +66,45 @@ public class Booking {
 //		this.passengerList = passengerList;
 //	}
 	
-
-	public Booking(long bookingId, long userId,
-			@NotNull(message = "Booking must contain atleast one passenger") @Min(value = 1, message = "Value must be at least 1") @Max(value = 10, message = "Value must be at most 10") Integer passengerCount,
-			@PastOrPresent(message = "must be a date in the past or in the present") LocalDate bookingDate,
-			@Min(value = 3000, message = "Value must be at least 3000") @Max(value = 2000000, message = "Value must be at most 2000000") Double ticketCost,
-			@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits") String contactNo,
-			@NotNull(message = "Only CANCELLED or BOOKED are allowed") BookingStatus bookingStatus,
-			List<Passenger> passengerList) {
-		super();
-		this.bookingId = bookingId;
-		this.userId = userId;
-		this.passengerCount = passengerCount;
-		this.bookingDate = bookingDate;
-		this.ticketCost = ticketCost;
-		this.contactNo = contactNo;
-		this.bookingStatus = bookingStatus;
-		this.passengerList = passengerList;
-	}
+//
+//	public Booking(long bookingId, long userId,
+//			@NotNull(message = "Booking must contain atleast one passenger") @Min(value = 1, message = "Value must be at least 1") @Max(value = 10, message = "Value must be at most 10") Integer passengerCount,
+//			@PastOrPresent(message = "must be a date in the past or in the present") LocalDate bookingDate,
+//			@Min(value = 3000, message = "Value must be at least 3000") @Max(value = 2000000, message = "Value must be at most 2000000") Double ticketCost,
+//			@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits") String contactNo,
+//			@NotNull(message = "Only CANCELLED or BOOKED are allowed") BookingStatus bookingStatus,
+//			List<Passenger> passengerList) {
+//		super();
+//		this.bookingId = bookingId;
+//		this.userId = userId;
+//		this.passengerCount = passengerCount;
+//		this.bookingDate = bookingDate;
+//		this.ticketCost = ticketCost;
+//		this.contactNo = contactNo;
+//		this.bookingStatus = bookingStatus;
+//		this.passengerList = passengerList;
+//	}
 
 	public String getContactNo() {
 		return contactNo;
 	}
+
+	public Booking(long bookingId, long userId,
+		@Min(value = 1, message = "Value must be at least 1") @Max(value = 10, message = "Value must be at most 10") Integer passengerCount,
+		@PastOrPresent(message = "must be a date in the past or in the present") LocalDate bookingDate,
+		@Min(value = 3000, message = "Value must be at least 3000") @Max(value = 2000000, message = "Value must be at most 2000000") Double ticketCost,
+		@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits") String contactNo,
+		BookingStatus bookingStatus, List<Passenger> passengerList) {
+	super();
+	this.bookingId = bookingId;
+	this.userId = userId;
+	this.passengerCount = passengerCount;
+	this.bookingDate = bookingDate;
+	this.ticketCost = ticketCost;
+	this.contactNo = contactNo;
+	this.bookingStatus = bookingStatus;
+	this.passengerList = passengerList;
+}
 
 	public void setContactNo(String contactNo) {
 		this.contactNo = contactNo;
