@@ -137,6 +137,7 @@ public class BookingServiceImpl implements BookingService{
 					Double amount1 = booking.getTicketCost()-price;
 					booking.setTicketCost(amount1);
 					booking.getPassengerList().remove(passenger1);
+					booking.setPassengerCount(booking.getPassengerCount()-1);
 					bookingRepo.save(booking);
 		}		
 		return booking;
