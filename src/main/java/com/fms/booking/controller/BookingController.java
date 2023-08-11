@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.fms.booking.DTO.BookingDTO;
 import com.fms.booking.entity.Booking;
 import com.fms.booking.entity.Passenger;
 import com.fms.booking.exception.BookingException;
@@ -77,6 +78,11 @@ public class BookingController {
 	@GetMapping("/validatePassenger/{passengerId}")
 	public Passenger validatePassenger(@PathVariable long passengerId) throws PassengerException{
 		return this.bookingService.validatePassenger(passengerId);
+	}
+	
+	@GetMapping("/getBooking/{bookingId}")
+	public BookingDTO getBooking(@PathVariable Long bookingId)throws BookingException{
+		return this.bookingService.getBookingById(bookingId);
 	}
 
 }

@@ -7,8 +7,11 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fms.booking.DTO.BookingDTO;
 import com.fms.booking.entity.Booking;
 import com.fms.booking.entity.Booking.BookingStatus;
 import com.fms.booking.entity.Passenger;
@@ -16,6 +19,7 @@ import com.fms.booking.exception.BookingException;
 import com.fms.booking.exception.PassengerException;
 import com.fms.booking.repository.BookingRepository;
 import com.fms.booking.repository.PassengerRepository;
+
 
 @Service
 public class BookingServiceImpl implements BookingService{
@@ -25,7 +29,10 @@ public class BookingServiceImpl implements BookingService{
 	
 	@Autowired
 	private PassengerRepository passengerRepo;
-
+	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@Override
 	@Transactional
 	public Booking addBooking(Booking booking) throws BookingException {
@@ -153,6 +160,18 @@ public class BookingServiceImpl implements BookingService{
 		else {
 			throw new BookingException("No booking found with id " + bookingId);
 		}
+	}
+
+
+	@Override
+	public BookingDTO getBookingById(Long bookingId) throws BookingException {
+		Optional<Booking> optPayment = this.bookingRepo.findById(bookingId);
+		if(optPayment.isEmpty()) {
+			throw new BookingException("Booking not found for given bookingId");
+		}
+		Booking booking = optPayment.get();
+		BookingDTO bookingDTO = modelMapper.map(booking,BookingDTO.class);
+		return bookingDTO;
 	}
 
 }

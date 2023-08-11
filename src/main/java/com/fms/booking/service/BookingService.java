@@ -3,6 +3,7 @@ package com.fms.booking.service;
 
 import java.util.List;
 
+import com.fms.booking.DTO.BookingDTO;
 import com.fms.booking.entity.Booking;
 import com.fms.booking.entity.Passenger;
 import com.fms.booking.exception.BookingException;
@@ -19,6 +20,7 @@ public interface BookingService {
 	public List<Booking> viewAllBookingsOfUser(long userId) throws BookingException;
 	public List<Booking> viewAllBookings() throws BookingException;
 	public Booking validateBooking(long bookingId) throws BookingException;
+	public BookingDTO getBookingById(Long bookingId)throws BookingException;
 	public Passenger validatePassenger(long passengerId) throws PassengerException;
 	
 	public String deleteBooking(long bookingId) throws BookingException; 
