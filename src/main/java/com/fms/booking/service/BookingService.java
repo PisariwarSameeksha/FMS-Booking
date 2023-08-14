@@ -23,5 +23,7 @@ public interface BookingService {
 	public BookingDTO getBookingById(Long bookingId)throws BookingException;
 	public Passenger validatePassenger(long passengerId) throws PassengerException;
 	
-	public String deleteBooking(long bookingId) throws BookingException; 
+	public String deleteBooking(long bookingId) throws BookingException;
+	
+	public long bookedTicketsCount(long sheduleId) ;
 }

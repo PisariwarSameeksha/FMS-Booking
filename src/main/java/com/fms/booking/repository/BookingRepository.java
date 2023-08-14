@@ -13,4 +13,6 @@ import com.fms.booking.entity.Booking;
 public interface BookingRepository extends JpaRepository<Booking, Long>{
 	
 	List<Booking> findBookingsByuserId(long userId);
+
+	List<Booking> findBookingsBysheduleId(long sheduleId);
 }
