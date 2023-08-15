@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import com.fms.booking.DTO.BookingDTO;
 import com.fms.booking.entity.Booking;
 import com.fms.booking.entity.Booking.BookingStatus;
 import com.fms.booking.entity.Passenger;
@@ -171,6 +172,64 @@ class FmsBookingTests {
 		Assertions.assertEquals(bookingServiceMock.viewAllBookingsOfUser(1),existedBooking);
 	}
 	
+	@Test 
+	void validViewAllBookedBookingsOfUserTest() throws BookingException {
+		List<Booking> existedBooking= new ArrayList<>();
+		existedBooking.add(booking1);
+		Mockito.when(bookingRepo.findAllBookingsByuserId(booking1.getUserId())).thenReturn
+		(existedBooking);
+		Assertions.assertEquals(bookingServiceMock.getAllBookedBookingsByUserId(1),existedBooking);
+	}
+	
+	@Test 
+	void invalidViewAllBookedBookingsOfUserTest() throws BookingException {
+		List<Booking> existedBooking= new ArrayList<>();
+		LocalDate date1=LocalDate.now();
+		List<Passenger> a= new ArrayList<>();
+		a.add(passenger1);
+	    Booking bkng=new Booking((long)8,(long)9,1,date1,3000.0,null,null,a, 1);
+	    existedBooking.add(bkng);
+		Mockito.when(bookingRepo.findAllBookingsByuserId(booking1.getUserId())).thenReturn
+		(existedBooking);
+		BookingException ex = Assertions.assertThrows(BookingException.class,
+				() -> bookingServiceMock.getAllBookedBookingsByUserId(9));
+		Assertions.assertEquals("No confirmed bookings found by this userId",ex.getMessage());
+	}
+	@Test 
+	void validSetBookingStatus() throws BookingException {
+		LocalDate date1=LocalDate.now();
+		List<Passenger> a= new ArrayList<>();
+		a.add(passenger1);
+	    Booking bkng=new Booking((long)8,(long)9,1,date1,3000.0,null,BookingStatus.BOOKED,a, 1);
+	    Mockito.when(bookingRepo.findById(booking1.getBookingId())).thenReturn(Optional.of(booking1));
+		Assertions.assertEquals(BookingStatus.BOOKED,bookingServiceMock.setBookingStatusBooked(booking1.getBookingId()));
+	}
+	@Test 
+	void validBookedTicketsCount() throws BookingException {
+		List<Booking> b= new ArrayList<>();
+		LocalDate date1=LocalDate.now();
+		List<Passenger> a= new ArrayList<>();
+		a.add(passenger1);
+		
+		
+	    Booking bkng=new Booking((long)8,(long)9,1,date1,6000.0,null,BookingStatus.BOOKED,a, 1);
+	    b.add(bkng);
+	    b.add(bkng);
+	    Mockito.when(bookingRepo.findBookingsBysheduleId(bkng.getSheduleId())).thenReturn(b);
+		Assertions.assertEquals(2,bookingServiceMock.bookedTicketsCount(bkng.getSheduleId()));
+	}
+	
+	
+	@Test 
+	void invalidSetBookingStatus() throws BookingException {
+	
+	    Mockito.when(bookingRepo.findById((long)2)).thenReturn(Optional.empty());
+	    BookingException ex = Assertions.assertThrows(BookingException.class,
+				() -> bookingServiceMock.setBookingStatusBooked((long)2));
+		Assertions.assertEquals("Could not update status since no booking found",ex.getMessage());
+	}
+	
+	
 	@Test
 	void invalidViewAllBookingsOfUserTest() throws BookingException {
 		List<Booking> existedBooking= new ArrayList<>();
@@ -195,6 +254,30 @@ class FmsBookingTests {
 				() -> bookingServiceMock.viewAllBookings());
 		Assertions.assertEquals("No bookings found" , ex.getMessage());
 	}
+	
+	@Test 
+	void validViewAllConfirmedBookingsTest() throws BookingException {
+		List<Booking> existedBooking= new ArrayList<>();
+		existedBooking.add(booking1);
+		Mockito.when(bookingRepo.findAll()).thenReturn(existedBooking);
+		Assertions.assertEquals(bookingServiceMock.getAllBookedBookings(),existedBooking);
+	}
+	
+	@Test 
+	void invalidViewAllConfirmedBookingsTest() throws BookingException {
+		List<Booking> existedBooking= new ArrayList<>();
+		LocalDate date1=LocalDate.now();
+		List<Passenger> a= new ArrayList<>();
+		a.add(passenger1);
+	    Booking bkng=new Booking((long)8,(long)9,1,date1,3000.0,null,null,a, 0);
+	    existedBooking.add(bkng);
+	    BookingException ex = Assertions.assertThrows(BookingException.class,
+				() -> iBookingService.getAllBookedBookings());
+		Mockito.when(bookingRepo.findAll()).thenReturn(existedBooking);
+		Assertions.assertEquals("No confirmed bookings found", ex.getMessage());
+	}
+	
+	
 	
 	
 	
@@ -253,7 +336,6 @@ class FmsBookingTests {
 		LocalDate date1=LocalDate.now();
 	    Passenger passngr= new Passenger(3, "John Doe", "9876543210", "ABC123XYZ", 30, "Male", 10.0);
 	    passengers1.add(passngr);
-	    Booking bkng=new Booking((long)8,(long)9,1,date1,3000.0,BookingStatus.BOOKED,passengers1);
 
 		
 		
@@ -293,7 +375,7 @@ class FmsBookingTests {
 		when(passengerRepo.findById(passenger.getPassengerId())).thenReturn(Optional.empty());
 		BookingException ex = Assertions.assertThrows(BookingException.class,
 				() -> iBookingService.cancelTicketFromBooking(booking2,4,1000));
-		assertEquals("Booking not found",ex.getMessage());
+		assertEquals("Please cancel whole booking",ex.getMessage());
 		
 		when(repository.findById(booking3.getBookingId())).thenReturn(Optional.of(booking3));
 		when(passengerRepo.findById(passenger.getPassengerId())).thenReturn(Optional.empty());

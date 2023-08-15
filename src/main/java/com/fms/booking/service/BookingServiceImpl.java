@@ -173,126 +173,60 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 
 	public long bookedTicketsCount(long sheduleId) {
-
 		int count = 0;
-
 		Iterable<Booking> findBooking = bookingRepo.findBookingsBysheduleId(sheduleId);
-
 		List<Booking> b = new ArrayList<>();
-
 		List<Integer> c1 = new ArrayList<>();
-
 		findBooking.forEach(booking -> {
-
 			b.add(booking);
-
 			Integer c2 = booking.getPassengerCount();
-
 			c1.add(c2);
-
 		});
-
 		if (b.isEmpty()) {
-
 			return 0;
 		}
-
 		for (int i = 0; i < c1.size(); i++) {
-
 			count = count + c1.get(i);
-
 		}
-
 		return (long) count;
-
 	}
-	
-
 
 	@Override
 
 	public Booking setBookingStatusBooked(long bookingId) throws BookingException {
-
-	 
-
-	Optional<Booking> existingBooking = bookingRepo.findById(bookingId);
-
-	if (!existingBooking.isPresent()) {
-
-	throw new BookingException("Could not update status");
-
+		Optional<Booking> existingBooking = bookingRepo.findById(bookingId);
+		if (!existingBooking.isPresent()) {
+			throw new BookingException("Could not update status since no booking found");
+		}
+		Booking bookingToBeUpadated = existingBooking.get();
+		bookingToBeUpadated.setBookingStatus(BookingStatus.BOOKED);
+		return bookingRepo.save(bookingToBeUpadated);
 	}
-
-	 
-
-	Booking bookingToBeUpadated= existingBooking.get();
-
-	bookingToBeUpadated.setBookingStatus(BookingStatus.BOOKED);
-
-	 
-
-	return bookingRepo.save(bookingToBeUpadated);
-
-	}
-
-	 
-
-	 
 
 	@Override
-
 	public List<Booking> getAllBookedBookings() throws BookingException {
-
-	Iterable<Booking> order2 = bookingRepo.findAll();
-
-	List<Booking> bookingList = new ArrayList<>();
-
-	order2.forEach(order ->{
-
-	if(order.getBookingStatus()==BookingStatus.BOOKED || order.getBookingStatus()==BookingStatus.CANCELLED)
-
-	bookingList.add(order);
-
-	});
-
-	if (bookingList.isEmpty())
-
-	throw new BookingException("No confirmed bookings found");
-
-	return bookingList;
-
+		Iterable<Booking> order2 = bookingRepo.findAll();
+		List<Booking> bookingList = new ArrayList<>();
+		order2.forEach(order -> {
+			if (order.getBookingStatus() == BookingStatus.BOOKED || order.getBookingStatus() == BookingStatus.CANCELLED)
+				bookingList.add(order);
+		});
+		if (bookingList.isEmpty())
+			throw new BookingException("No confirmed bookings found");
+		return bookingList;
 	}
-
-	 
-
-	 
 
 	@Override
-
 	public List<Booking> getAllBookedBookingsByUserId(long userId) throws BookingException {
-
-	Iterable<Booking> order2= bookingRepo.findAllBookingsByuserId(userId);
-
-	List<Booking> bookingList = new ArrayList<>();
-
-	order2.forEach(order ->{
-
-	if(order.getBookingStatus()==BookingStatus.BOOKED || order.getBookingStatus()==BookingStatus.CANCELLED)
-
-	bookingList.add(order);
-
-	});
-
-	if (bookingList.isEmpty())
-
-	throw new BookingException("No confirmed bookings found");
-
-	return bookingList;
-
-	 
-
+		Iterable<Booking> order2 = bookingRepo.findAllBookingsByuserId(userId);
+		List<Booking> bookingList = new ArrayList<>();
+		order2.forEach(order -> {
+			if (order.getBookingStatus() == BookingStatus.BOOKED || order.getBookingStatus() == BookingStatus.CANCELLED)
+				bookingList.add(order);
+		});
+		if (bookingList.isEmpty())
+			throw new BookingException("No confirmed bookings found by this userId");
+		return bookingList;
 	}
-
-	 
 
 }

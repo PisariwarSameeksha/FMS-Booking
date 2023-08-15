@@ -83,37 +83,7 @@ public class BookingController {
 
 	}
 
-	@GetMapping("/userBookings/{userId}")
 
-	public ResponseEntity<List<Booking>> viewAllBookingsOfUser(@Valid @PathVariable long userId)
-			throws BookingException {
-
-		logger.info("Received request to view bookings of userId: {}", userId);
-
-		return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.viewAllBookingsOfUser(userId));
-
-	}
-
-	@GetMapping("/allBookings")
-
-	public ResponseEntity<List<Booking>> viewAllBookings() throws BookingException {
-
-		logger.info("Received request to view all existed bookings");
-
-		return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.viewAllBookings());
-
-	}
-
-	@DeleteMapping("/deleteBooking/{bookingId}")
-
-	public ResponseEntity<String> deleteBooking(@PathVariable long bookingId) throws BookingException {
-
-		logger.info("Received request to delet booking with id: {}", bookingId);
-
-		return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.deleteBooking(bookingId));
-
-	}
-	
 	@GetMapping("/passengerCount/{sheduleId}")
 
 	public long bookedTicketsCount(@Valid @PathVariable long sheduleId) throws BookingException{
@@ -136,10 +106,6 @@ public class BookingController {
 
 	 public Booking validateBooking(@PathVariable long bookingId) throws
 	 BookingException{
-
-//	logger.info("Received request to verify booking with
-//			bookingId:{}",bookingId);
-
 	 return this.bookingService.validateBooking(bookingId);
 
 	}
@@ -182,7 +148,37 @@ public class BookingController {
 
 	}
 	
+//	@GetMapping("/userBookings/{userId}")
+//
+//	public ResponseEntity<List<Booking>> viewAllBookingsOfUser(@Valid @PathVariable long userId)
+//			throws BookingException {
+//
+//		logger.info("Received request to view bookings of userId: {}", userId);
+//
+//		return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.viewAllBookingsOfUser(userId));
+//
+//	}
 
+//	@GetMapping("/allBookings")
+//
+//	public ResponseEntity<List<Booking>> viewAllBookings() throws BookingException {
+//
+//		logger.info("Received request to view all existed bookings");
+//
+//		return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.viewAllBookings());
+//
+//	}
+
+//	@DeleteMapping("/deleteBooking/{bookingId}")
+//
+//	public ResponseEntity<String> deleteBooking(@PathVariable long bookingId) throws BookingException {
+//
+//		logger.info("Received request to delet booking with id: {}", bookingId);
+//
+//		return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.deleteBooking(bookingId));
+//
+//	}
+	
 	
 
 	// @GetMapping("/validatePassenger/{passengerId}")

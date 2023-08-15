@@ -85,30 +85,13 @@ public class Booking {
 //		this.passengerList = passengerList;
 //	}
 
-	public Booking(long bookingId, long userId,
-			@Min(value = 1, message = "Value must be at least 1") @Max(value = 10, message = "Value must be at most 10") Integer passengerCount,
-			@PastOrPresent(message = "must be a date in the past or in the present") LocalDate bookingDate,
-			@Min(value = 3000, message = "Value must be at least 3000") @Max(value = 2000000, message = "Value must be at most 2000000") Double ticketCost,
-			@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits") String contactNo,
-			BookingStatus bookingStatus, long sheduleId, List<Passenger> passengerList) {
-		super();
-		this.bookingId = bookingId;
-		this.userId = userId;
-		this.passengerCount = passengerCount;
-		this.bookingDate = bookingDate;
-		this.ticketCost = ticketCost;
-		this.contactNo = contactNo;
-		this.bookingStatus = bookingStatus;
-		this.sheduleId = sheduleId;
-		this.passengerList = passengerList;
-	}
 
 	public Booking(long bookingId, long userId,
 			@Min(value = 1, message = "Value must be at least 1") @Max(value = 10, message = "Value must be at most 10") Integer passengerCount,
 			@PastOrPresent(message = "must be a date in the past or in the present") LocalDate bookingDate,
 			@Min(value = 3000, message = "Value must be at least 3000") @Max(value = 2000000, message = "Value must be at most 2000000") Double ticketCost,
 			@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits") String contactNo,
-			BookingStatus bookingStatus, List<Passenger> passengerList) {
+			BookingStatus bookingStatus, List<Passenger> passengerList, long sheduleId) {
 		super();
 		this.bookingId = bookingId;
 		this.userId = userId;
@@ -118,6 +101,8 @@ public class Booking {
 		this.contactNo = contactNo;
 		this.bookingStatus = bookingStatus;
 		this.passengerList = passengerList;
+		this.sheduleId = sheduleId;
+
 	}
 
 	public String getContactNo() {
