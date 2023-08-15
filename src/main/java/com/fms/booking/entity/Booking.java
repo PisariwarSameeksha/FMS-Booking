@@ -54,36 +54,6 @@ public class Booking {
 
 	}
 
-//	public Booking(long bookingId, long userId, Integer passengerCount, LocalDate bookingDate, Double ticketCost,
-//			BookingStatus bookingStatus, List<Passenger> passengerList) {
-//		super();
-//		this.bookingId = bookingId;
-//		this.userId = userId;
-//		this.passengerCount = passengerCount;
-//		this.bookingDate = bookingDate;
-//		this.ticketCost = ticketCost;
-//		this.bookingStatus = bookingStatus;
-//		this.passengerList = passengerList;
-//	}
-
-//
-//	public Booking(long bookingId, long userId,
-//			@NotNull(message = "Booking must contain atleast one passenger") @Min(value = 1, message = "Value must be at least 1") @Max(value = 10, message = "Value must be at most 10") Integer passengerCount,
-//			@PastOrPresent(message = "must be a date in the past or in the present") LocalDate bookingDate,
-//			@Min(value = 3000, message = "Value must be at least 3000") @Max(value = 2000000, message = "Value must be at most 2000000") Double ticketCost,
-//			@Pattern(regexp = "^[789]\\d{9}$", message = "Phone number must be 10 digits") String contactNo,
-//			@NotNull(message = "Only CANCELLED or BOOKED are allowed") BookingStatus bookingStatus,
-//			List<Passenger> passengerList) {
-//		super();
-//		this.bookingId = bookingId;
-//		this.userId = userId;
-//		this.passengerCount = passengerCount;
-//		this.bookingDate = bookingDate;
-//		this.ticketCost = ticketCost;
-//		this.contactNo = contactNo;
-//		this.bookingStatus = bookingStatus;
-//		this.passengerList = passengerList;
-//	}
 
 
 	public Booking(long bookingId, long userId,

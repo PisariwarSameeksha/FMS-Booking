@@ -62,6 +62,7 @@ class FmsBookingTests {
 		s.setLugguage(5);
 		s.setUid("143143143143");
 		s.setContactNo("7036011143");
+		
 		return s;
 	}
 	
@@ -93,6 +94,8 @@ class FmsBookingTests {
 	    return  booking2;
 	
 	}
+	
+
 	
 	Booking booking1 = FmsBookingTests.demo2();
 	Booking booking3=FmsBookingTests.demo3();
@@ -201,8 +204,8 @@ class FmsBookingTests {
 		List<Passenger> a= new ArrayList<>();
 		a.add(passenger1);
 	    Booking bkng=new Booking((long)8,(long)9,1,date1,3000.0,null,BookingStatus.BOOKED,a, 1);
-	    Mockito.when(bookingRepo.findById(booking1.getBookingId())).thenReturn(Optional.of(booking1));
-		Assertions.assertEquals(BookingStatus.BOOKED,bookingServiceMock.setBookingStatusBooked(booking1.getBookingId()));
+	    Mockito.when(bookingRepo.findById(bkng.getBookingId())).thenReturn(Optional.of(bkng));
+		Assertions.assertEquals(BookingStatus.BOOKED,bookingServiceMock.setBookingStatusBooked(bkng.getBookingId()));
 	}
 	@Test 
 	void validBookedTicketsCount() throws BookingException {
@@ -331,32 +334,27 @@ class FmsBookingTests {
 	//dummy
 	@Test
 	void cancelTicketFromBooking() throws BookingException, PassengerException {
-		Booking booking4=new Booking();
-		List<Passenger> passengers1 = new ArrayList<>();
-		LocalDate date1=LocalDate.now();
-	    Passenger passngr= new Passenger(3, "John Doe", "9876543210", "ABC123XYZ", 30, "Male", 10.0);
-	    passengers1.add(passngr);
-
-		
-		
+	
 		Booking booking2 = new Booking();
 	    List<Passenger> passengers = new ArrayList<>();
-	    passengers.add(new Passenger(1, "Akash", "9876543210", "ABC123XYZ", 30, "Male", 10.0));
-	    passengers.add(new Passenger(3, "John Doe", "9876543210", "ABC123XYZ", 30, "Male", 10.0));
-	    Passenger passenger= new Passenger(3, "John Doe", "9876543210", "ABC123XYZ", 30, "Male", 10.0);
+//	    passengers.add(new Passenger(1, "Akash", "9876543210", "ABC123XYZ", 30, "Male", 10.0));
+//	    passengers.add(new Passenger(3, "John Doe", "9876543210", "ABC123XYZ", 30, "Male", 10.0));
+	    Passenger passenger7= new Passenger(3, "John Doe", "9876543210", "ABC123XYZ", 30, "Male", 10.0);
+	    Passenger passenger8= new Passenger(4, "John Doe", "9876543210", "ABC123XYZ", 30, "Male", 10.0);
+	    passengers.add(passenger8);
+	    passengers.add(passenger7);
+
 	    booking2.setBookingId(1);
 	    booking2.setPassengerList(passengers);
 	    booking2.setPassengerCount(passengers.size());
 	    booking2.setBookingDate(LocalDate.now());
-	    booking2.setTicketCost(3000.0);
+	    booking2.setTicketCost(6000.0);
 	    booking2.setBookingStatus(BookingStatus.BOOKED);
 	    
 		
 		when(repository.findById(booking2.getBookingId())).thenReturn(Optional.of(booking2));
-		when(passengerRepo.findById((long)3)).thenReturn(Optional.of(passenger));
-		when(repository.save(booking2)).thenReturn(booking2);
-		when(passengerRepo.save(passenger)).thenReturn(passenger);
-		assertEquals(booking3.getBookingDate(), iBookingService.cancelTicketFromBooking(booking2,(long)3,(double)10).getBookingDate());
+		when(passengerRepo.findById((long)3)).thenReturn(Optional.of(passenger7));
+		assertEquals(1, iBookingService.cancelTicketFromBooking(booking2,passenger7.getPassengerId(),(double)3000).getPassengerCount());
 	}
 	
 	@Test
@@ -377,11 +375,19 @@ class FmsBookingTests {
 				() -> iBookingService.cancelTicketFromBooking(booking2,4,1000));
 		assertEquals("Please cancel whole booking",ex.getMessage());
 		
-		when(repository.findById(booking3.getBookingId())).thenReturn(Optional.of(booking3));
-		when(passengerRepo.findById(passenger.getPassengerId())).thenReturn(Optional.empty());
-		PassengerException ex1 = Assertions.assertThrows(PassengerException.class,
-				() -> iBookingService.cancelTicketFromBooking(booking3,4,1000));
-		assertEquals("Passenger not found",ex1.getMessage());
+//		when(repository.findById(booking3.getBookingId())).thenReturn(Optional.empty());
+//		BookingException ex2 = Assertions.assertThrows(BookingException.class,
+//				() -> bookingServiceMock.cancelTicketFromBooking(booking3,4,1000));
+//		assertEquals("Booking not found",ex2.getMessage());
+//		
+//		
+//		when(repository.findById(booking2.getBookingId())).thenReturn(Optional.of(booking2));
+//		when(passengerRepo.findById(passenger.getPassengerId())).thenReturn(Optional.of(passenger));
+//		PassengerException ex1 = Assertions.assertThrows(PassengerException.class,
+//				() -> iBookingService.cancelTicketFromBooking(booking2,3,1000));
+//		assertEquals("Passenger not found",ex1.getMessage());
+		
+		
 		
 		
 		

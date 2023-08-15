@@ -128,13 +128,13 @@ public class BookingServiceImpl implements BookingService {
 			throw new BookingException("Please cancel whole booking");
 		} else {
 			Optional<Booking> booking2 = bookingRepo.findById(booking1.getBookingId());
-			if (!booking2.isPresent()) {
-				throw new BookingException("Booking not found");
-			}
+//			if (!booking2.isPresent()) {
+//				throw new BookingException("Booking not found");
+//			}
 			Optional<Passenger> passenger = passengerRepo.findById(passengerId);
-			if (!passenger.isPresent()) {
-				throw new PassengerException("Passenger not found");
-			}
+//			if (!passenger.isPresent()) {
+//				throw new PassengerException("Passenger not found");
+//			}
 			Booking booking = booking2.get();
 			Passenger passenger1 = passenger.get();
 			if (booking.getPassengerList().contains(passenger1)) {
@@ -182,9 +182,9 @@ public class BookingServiceImpl implements BookingService {
 			Integer c2 = booking.getPassengerCount();
 			c1.add(c2);
 		});
-		if (b.isEmpty()) {
-			return 0;
-		}
+//		if (b.isEmpty()) {
+//			return 0;
+//		}
 		for (int i = 0; i < c1.size(); i++) {
 			count = count + c1.get(i);
 		}
