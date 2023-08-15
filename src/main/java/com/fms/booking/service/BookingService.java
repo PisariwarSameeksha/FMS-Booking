@@ -26,4 +26,11 @@ public interface BookingService {
 	public String deleteBooking(long bookingId) throws BookingException;
 	
 	public long bookedTicketsCount(long sheduleId) ;
+
+
+	public Booking setBookingStatusBooked(long bookingId) throws BookingException;
+
+	public List<Booking> getAllBookedBookings() throws BookingException;
+
+	public List<Booking> getAllBookedBookingsByUserId(long userId) throws BookingException;
 }

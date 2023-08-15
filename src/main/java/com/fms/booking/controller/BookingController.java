@@ -143,7 +143,44 @@ public class BookingController {
 	 return this.bookingService.validateBooking(bookingId);
 
 	}
-	
+
+	 
+
+	@GetMapping("/allConfirmedBookings")
+
+	public ResponseEntity<List<Booking>> getAllBookedBookings() throws BookingException{
+
+	logger.info("Received request to view all existed confirmed bookings");
+
+	return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.getAllBookedBookings());
+
+	}
+
+	 
+
+	@GetMapping("/userPaidBookings/{userId}")
+
+	public ResponseEntity<List<Booking>> getAllBookedBookingsByUserId(@Valid @PathVariable long userId) throws BookingException{
+
+	logger.info("Received request to view bookings of userId: {}", userId);
+
+	return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.getAllBookedBookingsByUserId(userId));
+
+	}
+
+	 
+
+	@PutMapping("/setBookingStatus/{bookingId}")
+
+	public ResponseEntity<Booking> setBookingStatusBooked(@PathVariable long bookingId) throws BookingException {
+
+	logger.info("Received request to cancel booking with id:{}", bookingId);
+
+	return ResponseEntity.status(HttpStatus.OK).body(this.bookingService.setBookingStatusBooked(bookingId));
+
+	 
+
+	}
 	
 
 	

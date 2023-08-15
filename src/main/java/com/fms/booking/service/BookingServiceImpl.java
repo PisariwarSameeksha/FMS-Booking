@@ -206,5 +206,93 @@ public class BookingServiceImpl implements BookingService {
 		return (long) count;
 
 	}
+	
+
+
+	@Override
+
+	public Booking setBookingStatusBooked(long bookingId) throws BookingException {
+
+	 
+
+	Optional<Booking> existingBooking = bookingRepo.findById(bookingId);
+
+	if (!existingBooking.isPresent()) {
+
+	throw new BookingException("Could not update status");
+
+	}
+
+	 
+
+	Booking bookingToBeUpadated= existingBooking.get();
+
+	bookingToBeUpadated.setBookingStatus(BookingStatus.BOOKED);
+
+	 
+
+	return bookingRepo.save(bookingToBeUpadated);
+
+	}
+
+	 
+
+	 
+
+	@Override
+
+	public List<Booking> getAllBookedBookings() throws BookingException {
+
+	Iterable<Booking> order2 = bookingRepo.findAll();
+
+	List<Booking> bookingList = new ArrayList<>();
+
+	order2.forEach(order ->{
+
+	if(order.getBookingStatus()==BookingStatus.BOOKED || order.getBookingStatus()==BookingStatus.CANCELLED)
+
+	bookingList.add(order);
+
+	});
+
+	if (bookingList.isEmpty())
+
+	throw new BookingException("No confirmed bookings found");
+
+	return bookingList;
+
+	}
+
+	 
+
+	 
+
+	@Override
+
+	public List<Booking> getAllBookedBookingsByUserId(long userId) throws BookingException {
+
+	Iterable<Booking> order2= bookingRepo.findAllBookingsByuserId(userId);
+
+	List<Booking> bookingList = new ArrayList<>();
+
+	order2.forEach(order ->{
+
+	if(order.getBookingStatus()==BookingStatus.BOOKED || order.getBookingStatus()==BookingStatus.CANCELLED)
+
+	bookingList.add(order);
+
+	});
+
+	if (bookingList.isEmpty())
+
+	throw new BookingException("No confirmed bookings found");
+
+	return bookingList;
+
+	 
+
+	}
+
+	 
 
 }
