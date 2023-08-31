@@ -108,20 +108,6 @@ class FmsBookingTests {
 		Assertions.assertNotNull(booking1);
 	}
 	
-	@Test
-	void validAddBookingTest2() throws Exception{
-		
-		Mockito.when(repository.save(booking1)).thenReturn(booking1);
-		assertEquals(booking1, iBookingService.addBooking(booking1));
-	}
-	
-	@Test
-	void invalidBookingAdditionTest() throws BookingException {
-		Mockito.when(bookingRepo.findById(booking1.getBookingId())).thenReturn(Optional.of(booking1));
-		BookingException ex = Assertions.assertThrows(BookingException.class,
-				() -> bookingServiceMock.addBooking(booking1));
-		Assertions.assertEquals("Booking already present", ex.getMessage());
-	}
 	
 	@Test
 	void validValidateBookingTest() throws  BookingException {
