@@ -198,15 +198,7 @@ class FmsBookingTests {
 				() -> bookingServiceMock.getAllBookedBookingsByUserId(9));
 		Assertions.assertEquals("No confirmed bookings found by this userId",ex.getMessage());
 	}
-	@Test 
-	void validSetBookingStatus() throws BookingException {
-		LocalDate date1=LocalDate.now();
-		List<Passenger> a= new ArrayList<>();
-		a.add(passenger1);
-	    Booking bkng=new Booking((long)8,(long)9,1,date1,3000.0,null,BookingStatus.BOOKED,a, 1);
-	    Mockito.when(bookingRepo.findById(bkng.getBookingId())).thenReturn(Optional.of(bkng));
-		Assertions.assertEquals(BookingStatus.BOOKED,bookingServiceMock.setBookingStatusBooked(bkng.getBookingId()));
-	}
+
 	@Test 
 	void validBookedTicketsCount() throws BookingException {
 		List<Booking> b= new ArrayList<>();

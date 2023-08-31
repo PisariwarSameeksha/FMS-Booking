@@ -9,9 +9,12 @@ import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fms.booking.DTO.BookingDTO;
+import com.fms.booking.DTO.ScheduleFlightDTO;
 import com.fms.booking.entity.Booking;
 import com.fms.booking.entity.Booking.BookingStatus;
 import com.fms.booking.entity.Passenger;
@@ -19,6 +22,8 @@ import com.fms.booking.exception.BookingException;
 import com.fms.booking.exception.PassengerException;
 import com.fms.booking.repository.BookingRepository;
 import com.fms.booking.repository.PassengerRepository;
+
+import reactor.core.publisher.Mono;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -31,24 +36,35 @@ public class BookingServiceImpl implements BookingService {
 
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private WebClient webclient;
 
 	@Override
 	@Transactional
 	public Booking addBooking(Booking booking) throws BookingException {
 
-		Optional<Booking> booking1 = bookingRepo.findById(booking.getBookingId());
-		if (booking1.isPresent()) {
-			throw new BookingException("Booking already present");
+		Mono<ScheduleFlightDTO> response = webclient.get().uri("http://localhost:8093/api/scheduleFlight/schedule/{fnum}",booking.getSheduleId())
+				.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(ScheduleFlightDTO.class).log();
+
+		ScheduleFlightDTO scheduleFlightDTO = response.block();
+		if (scheduleFlightDTO == null) {
+				throw new BookingException("!!Schedule Not Found !!");
 		}
+		Optional<Booking> booking1 = bookingRepo.findById(booking.getBookingId()); 
+		if (booking1.isPresent()) {
+		 throw new BookingException("Booking already present");
+		}
+
 		List<Passenger> passengers = booking.getPassengerList();
 		for (Passenger passenger : passengers) {
-			passengerRepo.save(passenger);
+		passengerRepo.save(passenger);
 		}
 		booking.setBookingDate(LocalDate.now());
 		booking.setPassengerCount(passengers.size());
-		booking.setTicketCost(booking.getPassengerCount() * 3000);
+		booking.setTicketCost(booking.getPassengerCount() * scheduleFlightDTO.getPrice());
 		return bookingRepo.save(booking);
-	}
+		}
 
 	@Override
 	public Booking modifyBooking(Booking booking) throws BookingException {
@@ -178,9 +194,11 @@ public class BookingServiceImpl implements BookingService {
 		List<Booking> b = new ArrayList<>();
 		List<Integer> c1 = new ArrayList<>();
 		findBooking.forEach(booking -> {
+			if(booking.getBookingStatus()==BookingStatus.BOOKED)
+			{
 			b.add(booking);
-			Integer c2 = booking.getPassengerCount();
-			c1.add(c2);
+			c1.add(booking.getPassengerCount());
+			}
 		});
 //		if (b.isEmpty()) {
 //			return 0;
